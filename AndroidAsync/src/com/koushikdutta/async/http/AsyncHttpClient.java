@@ -618,11 +618,7 @@ public class AsyncHttpClient {
         return ret;
     }
 
-    public static interface WebSocketConnectCallback {
-        public void onCompleted(Exception ex, WebSocket webSocket);
-    }
-
-    public Future<WebSocket> websocket(final AsyncHttpRequest req, String protocol, final WebSocketConnectCallback callback) {
+    public Future<WebSocket> websocket(final AsyncHttpRequest req, String protocol, final WebSocket.WebSocketConnectCallback callback) {
         WebSocketImpl.addWebSocketUpgradeHeaders(req, protocol);
         final SimpleFuture<WebSocket> ret = new SimpleFuture<WebSocket>();
         Cancellable connect = execute(req, new HttpConnectCallback() {
@@ -653,7 +649,7 @@ public class AsyncHttpClient {
         return ret;
     }
 
-    public Future<WebSocket> websocket(String uri, String protocol, final WebSocketConnectCallback callback) {
+    public Future<WebSocket> websocket(String uri, String protocol, final WebSocket.WebSocketConnectCallback callback) {
 //        assert callback != null;
         final AsyncHttpGet get = new AsyncHttpGet(uri.replace("ws://", "http://").replace("wss://", "https://"));
         return websocket(get, protocol, callback);

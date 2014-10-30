@@ -14,6 +14,10 @@ public interface WebSocket extends AsyncSocket {
         public void onRawDataAvailable(byte[] data);
     }
 
+    public static interface WebSocketConnectCallback {
+        public void onCompleted(Exception ex, WebSocket webSocket);
+    }
+
     public void send(byte[] bytes);
     public void send(String string);
     public void send(byte [] bytes, int offset, int len);
