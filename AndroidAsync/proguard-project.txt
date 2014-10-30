@@ -12,6 +12,11 @@
 
 # Add any project specific keep options here:
 
+-keepparameternames
+-renamesourcefileattribute SourceFile
+-keepattributes Exceptions,InnerClasses,Signature,Deprecated,
+                SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
@@ -23,11 +28,14 @@
   public protected private *;
 }
 
--keep class mws.** {
-  *;
+-keep interface com.koushikdutta.async.http.WebSocket {
+ *;
+}
+-keep interface com.koushikdutta.async.http.WebSocket$* {
+ *;
 }
 
--keep class com.koushikdutta.async.WebSocket {
+-keep class mws.** {
   *;
 }
 
