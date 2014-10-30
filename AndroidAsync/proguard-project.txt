@@ -22,3 +22,12 @@
 -keep class * extends com.koushikdutta.async.TapCallback {
   public protected private *;
 }
+
+-keep class mws.** {
+  *;
+}
+
+-keep class com.koushikdutta.async.WebSocket {
+  *;
+}
+

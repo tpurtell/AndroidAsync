@@ -80,7 +80,8 @@ public class WebSocketImpl implements WebSocket {
             }
             @Override
             protected void onMessage(byte[] payload) {
-                addAndEmit(new ByteBufferList(payload));
+                if (WebSocketImpl.this.mRawDataCallback != null)
+                    WebSocketImpl.this.mRawDataCallback.onRawDataAvailable(payload);
             }
 
             @Override
@@ -195,6 +196,13 @@ public class WebSocketImpl implements WebSocket {
 
     @Override
     public void close() {
+        mParser.close(1000, "ClientClose");
+        mSocket.close();
+    }
+    
+    @Override
+    public void close(int code, String reason) {
+        mParser.close(code, reason);
         mSocket.close();
     }
 
@@ -255,6 +263,16 @@ public class WebSocketImpl implements WebSocket {
     public StringCallback getStringCallback() {
         return mStringCallback;
     }
+    private RawDataCallback mRawDataCallback;
+
+    @Override
+    public RawDataCallback getRawDataCallback() {
+        return mRawDataCallback;
+    }
+    public void setRawDataCallback(RawDataCallback cb) {
+        mRawDataCallback = cb;
+    }
+    
 
     private PongCallback mPongCallback;
     @Override
