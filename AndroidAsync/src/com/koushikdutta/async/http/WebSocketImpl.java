@@ -91,9 +91,9 @@ public class WebSocketImpl implements WebSocket {
             }
             @Override
             protected void onDisconnect(int code, String reason) {
-                mSocket.close();
-//                if (WebSocketImpl.this.mClosedCallback != null)
-//                    WebSocketImpl.this.mClosedCallback.onCompleted(null);
+              if (WebSocketImpl.this.mDisconnectCallback != null)
+                  WebSocketImpl.this.mDisconnectCallback.onCompleted(null, code, reason);
+              mSocket.close();
             }
             @Override
             protected void sendFrame(byte[] frame) {
@@ -156,6 +156,13 @@ public class WebSocketImpl implements WebSocket {
     public WebSocketImpl(AsyncSocket socket) {
         mSocket = socket;
         mSink = new BufferedDataSink(mSocket);
+        mSocket.setClosedCallback(new CompletedCallback() {
+            @Override
+            public void onCompleted(Exception ex) {
+                if (WebSocketImpl.this.mDisconnectCallback != null)
+                    WebSocketImpl.this.mDisconnectCallback.onCompleted(ex, 0, null);
+            }
+        });
     }
     
     public static WebSocket finishHandshake(RawHeaders requestHeaders, AsyncHttpResponse response) {
@@ -207,8 +214,15 @@ public class WebSocketImpl implements WebSocket {
     }
 
     @Override
-    public void setClosedCallback(CompletedCallback handler) {
-        mSocket.setClosedCallback(handler);
+    public void setClosedCallback(final CompletedCallback handler) {
+        mSocket.setClosedCallback(new CompletedCallback() {
+            @Override
+            public void onCompleted(Exception ex) {
+                if (WebSocketImpl.this.mDisconnectCallback != null)
+                    WebSocketImpl.this.mDisconnectCallback.onCompleted(ex, 0, null);
+                handler.onCompleted(ex);
+            }
+        });
     }
 
     @Override
@@ -269,8 +283,21 @@ public class WebSocketImpl implements WebSocket {
     public RawDataCallback getRawDataCallback() {
         return mRawDataCallback;
     }
+    @Override
     public void setRawDataCallback(RawDataCallback cb) {
         mRawDataCallback = cb;
+    }
+    
+    private DisconnectCallback mDisconnectCallback;
+    
+    @Override
+    public void setDisconnectCallback(DisconnectCallback cb) {
+        mDisconnectCallback = cb;
+        
+    }
+    @Override
+    public DisconnectCallback getDisconnectCallback() {
+        return mDisconnectCallback;
     }
     
 

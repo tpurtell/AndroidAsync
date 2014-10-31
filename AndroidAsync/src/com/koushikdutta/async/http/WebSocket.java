@@ -1,6 +1,7 @@
 package com.koushikdutta.async.http;
 
 import com.koushikdutta.async.AsyncSocket;
+import com.koushikdutta.async.callback.CompletedCallback;
 
 
 public interface WebSocket extends AsyncSocket {
@@ -14,8 +15,11 @@ public interface WebSocket extends AsyncSocket {
         public void onRawDataAvailable(byte[] data);
     }
 
-    public static interface WebSocketConnectCallback {
+    public static interface ConnectCallback {
         public void onCompleted(Exception ex, WebSocket webSocket);
+    }
+    public static interface DisconnectCallback {
+        public void onCompleted(Exception ex, int code, String reason);
     }
 
     public void send(byte[] bytes);
@@ -31,6 +35,9 @@ public interface WebSocket extends AsyncSocket {
     
     public void setRawDataCallback(RawDataCallback callback);
     public RawDataCallback getRawDataCallback();
+    
+    public void setDisconnectCallback(DisconnectCallback handler);
+    public DisconnectCallback getDisconnectCallback();
 
     public boolean isBuffering();
     
