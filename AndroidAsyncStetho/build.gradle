@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.0.1'
+    }
+}
+apply plugin: 'com.android.library'
+
+dependencies {
+    compile project(':AndroidAsync:AndroidAsync')
+    compile "com.facebook.stetho:stetho:1.0.0"
+}
+
+android {
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java {
+                srcDir 'src/'
+            }
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    defaultConfig {
+        targetSdkVersion 21
+        minSdkVersion 9
+    }
+
+    compileSdkVersion 21
+    buildToolsVersion '21.1.2'
+}
+
+// upload to maven task
+if (System.getenv().I_AM_KOUSH == 'true') {
+  apply from: 'https://raw.githubusercontent.com/koush/mvn-repo/master/maven.gradle'
+}

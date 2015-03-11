@@ -17,7 +17,7 @@ is it.
 
 ### Download
 
-Download [the latest JAR](http://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.koushikdutta.async&a=androidasync&v=LATEST
+Download [the latest JAR](https://search.maven.org/remote_content?g=com.koushikdutta.async&a=androidasync&v=LATEST
 ) or grab via Maven:
 
 ```xml
@@ -31,7 +31,7 @@ Download [the latest JAR](http://repository.sonatype.org/service/local/artifact/
 Gradle: 
 ```groovy
 dependencies {
-    compile 'com.koushikdutta.androidasync:AndroidAsync:1.0.0'
+    compile 'com.koushikdutta.async:androidasync:2.+'
 }
 ```
 
