@@ -95,14 +95,17 @@ public class AsyncNetworkSocket implements AsyncSocket {
     private void handleRemaining(int remaining) throws IOException {
         if (!mKey.isValid())
             throw new IOException(new CancelledKeyException());
-        if (remaining > 0) {
-            // chunked channels should not fail
-            assert !mChannel.isChunked();
-            // register for a write notification if a write fails
-            mKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-        }
-        else {
-            mKey.interestOps(SelectionKey.OP_READ);
+        try {
+            if (remaining > 0) {
+                // chunked channels should not fail
+                assert !mChannel.isChunked();
+                // register for a write notification if a write fails
+                mKey.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+            } else {
+                mKey.interestOps(SelectionKey.OP_READ);
+            }
+        } catch(CancelledKeyException e) {
+            throw new IOException(e);
         }
     }
     private ByteBufferList pending = new ByteBufferList();
