@@ -100,6 +100,12 @@ public class WebSocketImpl implements WebSocket {
             }
 
             @Override
+            protected void onPing(String payload) {
+                if (WebSocketImpl.this.mPingCallback != null)
+                    WebSocketImpl.this.mPingCallback.onPingReceived(payload);
+            }
+
+            @Override
             protected void onPong(String payload) {
                 if (WebSocketImpl.this.mPongCallback != null)
                     WebSocketImpl.this.mPongCallback.onPongReceived(payload);
@@ -299,6 +305,12 @@ public class WebSocketImpl implements WebSocket {
         return mDisconnectCallback;
     }
     
+
+    private PingCallback mPingCallback;
+    @Override
+    public void setPingCallback(PingCallback callback) {
+        mPingCallback = callback;
+    }
 
     private PongCallback mPongCallback;
     @Override

@@ -1,11 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.1'
-    }
-}
 apply plugin: 'com.android.library'
 
 android {
@@ -29,10 +21,10 @@ android {
         abortOnError false
     }
 
-//    defaultConfig {
-//        targetSdkVersion 21
-//        minSdkVersion 9
-//    }
+    defaultConfig {
+        targetSdkVersion 22
+        minSdkVersion 9
+    }
 
     compileSdkVersion 21
     buildToolsVersion '21.1.2'
